@@ -3,10 +3,10 @@
 require('dotenv').config();
 
 const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-
 const server = express();
+
+const path = require('path');
+const rootDir = require('./util/path');
 
 // ==============================================
 
@@ -14,19 +14,17 @@ const { PORT } = require('./config');
 
 // ==============================================
 
+server.use(require('cors')());
 server.use(express.json());
-server.use(cors());
-server.use(helmet());
-// -It is possible for middlewars to
-//  modify conflicting headers.
-// -Whichever middleware that
-//  comes last wins!
+server.use(express.static(path.join(rootDir, 'public')));
+server.use(require('helmet')());
 
 // ==============================================
 
 // -Catch all
 server.use('*', (req, res, next) => {
-  res.json({ message: 'catch all endpoint!' });
+  // res.json({ message: 'catch all endpoint!' });
+  res.sendFile(path.join(rootDir, 'views', 'index.html'));
 });
 
 // ==============================================
