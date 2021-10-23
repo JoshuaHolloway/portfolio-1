@@ -1,10 +1,14 @@
 # portfolio 1
 
-## Repo:
+### Repo:
 
-## Live Demo
+- https://github.com/JoshuaHolloway/portfolio-1
 
-## Technologies
+### Live Demo
+
+- 1on1programming.com
+
+### Technologies
 
 - Node.js with Express
 - Vanilla JavaScript
