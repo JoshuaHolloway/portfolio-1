@@ -1,5 +1,5 @@
 {
-  "name": "build-week-scaffolding-node",
+  "name": "portfolio-1",
   "version": "1.0.0",
   "scripts": {
     "start": "node index.js",
@@ -7,10 +7,10 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
-    "migrateh": "heroku run knex migrate:latest -a postgres--deploy",
-    "rollbackh": "heroku run knex migrate:rollback -a postgres--deploy",
-    "databaseh": "heroku pg:psql -a postgres--deploy",
-    "seedh": "heroku run knex seed:run -a postgres--deploy",
+    "migrateh": "heroku run knex migrate:latest -a portfolio----1",
+    "rollbackh": "heroku run knex migrate:rollback -a portfolio----1",
+    "databaseh": "heroku pg:psql -a portfolio----1",
+    "seedh": "heroku run knex seed:run -a portfolio----1",
     "test": "cross-env NODE_ENV=testing jest --watchAll --verbose --runInBand",
     "deploy": "git push heroku main"
   },
