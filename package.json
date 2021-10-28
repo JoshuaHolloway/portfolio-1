@@ -12,7 +12,8 @@
     "databaseh": "heroku pg:psql -a portfolio----1",
     "seedh": "heroku run knex seed:run -a portfolio----1",
     "test": "cross-env NODE_ENV=testing jest --watchAll --verbose --runInBand",
-    "deploy": "git push heroku main"
+    "deploy": "git push heroku main",
+    "heroku-postbuild": "cd client && npm i && npm run build"
   },
   "engines": {
     "node": "14.18.1"
