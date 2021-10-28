@@ -6,9 +6,13 @@ exports.up = async (knex) => {
       users.string('password', 200).notNullable();
       users.timestamps(false, true);
     })
-    .createTable('quotes', (users) => {
-      users.increments('quote_id');
-      users.string('quote', 200).notNullable();
+    .createTable('quotes', (quotes) => {
+      quotes.increments('quote_id');
+      quotes.string('quote', 425).notNullable();
+      quotes.string('attributed_to', 50);
+      quotes.string('submitted_by', 50);
+      quotes.integer('vote_up').unsigned();
+      quotes.integer('vote_down').unsigned();
     });
 };
 
