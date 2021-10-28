@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: 5% 5%;
+}
+
+.App {
+  width: 80vw;
+  /* background: hotpink; */
+  /* padding: 5%; */
+  text-align: center;
+}
