@@ -2,10 +2,21 @@ const router = require('express').Router();
 
 const usersController = require('./users-controller');
 
+const authMiddleware = require('../auth/auth-middleware');
+
 // ==============================================
 
 // [GET] /api/users
 router.get('/', usersController.getUsers);
+
+// ==============================================
+
+// [GET] /api/users/protected
+router.get(
+  '/protected',
+  authMiddleware.restricted,
+  usersController.protectedRoute
+);
 
 // ==============================================
 

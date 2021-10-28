@@ -20,4 +20,10 @@ const public_path = () => {
 
 // ==============================================
 
-module.exports = public_path;
+const index_path = () => {
+  return path.join(root_path(), 'public', 'views', 'index.html');
+};
+
+// ==============================================
+
+module.exports = { public_path, index_path };

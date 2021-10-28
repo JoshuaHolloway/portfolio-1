@@ -18,15 +18,15 @@ server.use('/api/users', usersRouter);
 
 // ==============================================
 
-const public_path = require('../util/path');
-server.use(express.static(public_path()));
+const paths = require('../util/path');
+server.use(express.static(paths.public_path()));
 
 // ==============================================
 
 // -Catch all endpoint
 server.use('*', (req, res, next) => {
   // res.json({ message: 'catch all endpoint!' });
-  res.sendFile(path.join(rootDir, 'public', 'views', 'index.html'));
+  res.sendFile(paths.index_path());
 });
 
 // ==============================================

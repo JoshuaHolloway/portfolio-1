@@ -8,6 +8,12 @@ const getUsers = async (req, res) => {
 
 // ==============================================
 
+const protectedRoute = (req, res) => {
+  res.json({ message: 'protected route!' });
+};
+
+// ==============================================
+
 const postUser = async (req, res) => {
   res.status(201).json(await usersModel.insertUser(req.body));
 };
@@ -17,4 +23,5 @@ const postUser = async (req, res) => {
 module.exports = {
   getUsers,
   postUser,
+  protectedRoute,
 };
