@@ -4,11 +4,13 @@ const usersController = require('./users-controller');
 
 // ==============================================
 
-router.get('/api/users', usersController.getUsers);
+// [GET] /api/users
+router.get('/', usersController.getUsers);
 
 // ==============================================
 
-router.post('/api/users', usersController.postUserS);
+// [POST] /api/users
+router.post('/', usersController.postUser);
 
 // ==============================================
 

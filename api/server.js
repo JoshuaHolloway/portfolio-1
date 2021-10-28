@@ -48,7 +48,7 @@ server.use(cors());
 // ==============================================
 
 const usersRouter = require('./users/users-router');
-server.use('/', usersRouter);
+server.use('/api/users', usersRouter);
 
 // ==============================================
 
