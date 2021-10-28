@@ -2,6 +2,17 @@ const db = require('../../data/db-config');
 
 // ==============================================
 
+function findBy(filter) {
+  return (
+    db('users as u')
+      // .join('roles as r', 'u.role', '=', 'r.id')
+      // .select('u.id', 'u.username', 'r.name as role', 'u.password')
+      .where(filter)
+  );
+}
+
+// ==============================================
+
 function getAllUsers() {
   return db('users');
 }
@@ -40,4 +51,5 @@ async function insertQuote(quote) {
 module.exports = {
   getAllUsers,
   insertUser,
+  findBy,
 };

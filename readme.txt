@@ -1,0 +1,1 @@
+http post :5000/api/auth/register username=josh password=1234
