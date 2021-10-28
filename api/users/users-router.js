@@ -1,18 +1,14 @@
 const router = require('express').Router();
 
-const usersModel = require('./users-model');
+const usersController = require('./users-controller');
 
 // ==============================================
 
-router.get('/api/users', async (req, res) => {
-  res.json(await usersModel.getAllUsers());
-});
+router.get('/api/users', usersController.getUsers);
 
 // ==============================================
 
-router.post('/api/users', async (req, res) => {
-  res.status(201).json(await usersModel.insertUser(req.body));
-});
+router.post('/api/users', usersController.postUserS);
 
 // ==============================================
 
