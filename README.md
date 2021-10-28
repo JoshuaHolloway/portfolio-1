@@ -13,5 +13,5 @@
 - Node.js with Express
 - Vanilla JavaScript
 - Vanilla CSS with SCSS
-- SQL with SQLite
+- SQL with Postgres
 - HTML with EJS

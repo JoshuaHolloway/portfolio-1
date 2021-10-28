@@ -1,7 +1,6 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const db = require('../data/db-config');
+const router = require('express').Router();
+
+const db = require('../../data/db-config');
 
 // ==============================================
 
@@ -40,16 +39,45 @@ async function insertQuote(quote) {
 
 // ==============================================
 
-const server = express();
-server.use(express.json());
-server.use(helmet());
-server.use(cors());
+router.get('/josh', (req, res) => {
+  res.json({ message: 'josh. GET' });
+});
 
 // ==============================================
 
-const usersRouter = require('./users/users-router');
-server.use('/', usersRouter);
+router.post('/josh', (req, res) => {
+  const body = req.body;
+
+  res.json({ message: body.message });
+});
 
 // ==============================================
 
-module.exports = server;
+router.get('/api/users', async (req, res) => {
+  res.json(await getAllUsers());
+});
+
+// ==============================================
+
+router.post('/api/users', async (req, res) => {
+  res.status(201).json(await insertUser(req.body));
+});
+
+// ==============================================
+
+router.get('/api/quotes', async (req, res) => {
+  res.status(201).json(await getAllQuotes());
+});
+
+// ==============================================
+
+router.post('/api/quotes', async (req, res) => {
+  console.log('[POST] /api/quotes -> req.body: ', req.body);
+
+  res.status(201).json(await insertQuote(req.body));
+  // res.status(201).json({ message: 'HI!' });
+});
+
+// ==============================================
+
+module.exports = router;
