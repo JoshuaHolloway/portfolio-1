@@ -59,9 +59,13 @@ server.use('/api/users', usersRouter);
 // -The root route (/) serving index.html
 //  at the React Routing root route
 //  works without the catch-all endpoint below.
+console.log(
+  '__dirname: ',
+  path.join(__dirname, '..', 'client/build', 'index.html')
+);
 server.get('*', (req, res) => {
   // res.send('<h1>success</h1>');
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'client/build', 'index.html'));
 });
 
 // ==============================================
