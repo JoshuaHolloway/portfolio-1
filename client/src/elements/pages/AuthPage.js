@@ -8,8 +8,8 @@ const AuthPage = () => {
   const auth = useContext(AuthContext);
   // --------------------------------------------
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('homer');
+  const [password, setPassword] = useState('1234');
 
   useEffect(() => {
     console.log('username: ', username);

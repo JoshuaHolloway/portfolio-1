@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { AuthContext } from '../../../shared/context/auth-context';
 
@@ -18,11 +18,22 @@ const NavLinks = (props) => {
   // --------------------------------------------
 
   return (
-    <ul className={x['nav-links']}>
-      <li>(public) Users</li>
-      {auth.isLoggedIn && <li>(restricted) Account Dashboard</li>}
-      {!auth.isLoggedIn && <li>(public)Authenticate</li>}
-    </ul>
+    <>
+      {auth.isLoggedIn && (
+        <button
+          onClick={() => {
+            auth.logout();
+          }}
+        >
+          Logout
+        </button>
+      )}
+      <ul className={x['nav-links']}>
+        <li>(public) Users</li>
+        {auth.isLoggedIn && <li>(restricted) Account Dashboard</li>}
+        {!auth.isLoggedIn && <li>(public)Authenticate</li>}
+      </ul>
+    </>
   );
 
   // --------------------------------------------

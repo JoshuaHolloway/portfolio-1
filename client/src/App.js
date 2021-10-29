@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -60,6 +60,29 @@ const App = () => {
     setUsers(users);
   };
 
+  // -Frontend protected routes
+  let routes;
+  if (isLoggedIn) {
+    routes = (
+      <React.Fragment>
+        <Route path='/'>
+          Private Route!
+          <button onClick={getUsersHandler}>Get Users</button>
+        </Route>
+      </React.Fragment>
+    );
+  } else {
+    routes = (
+      <React.Fragment>
+        <Route path='/'>
+          <AuthPage />
+        </Route>
+
+        {/* <Redirect to='/public' /> */}
+      </React.Fragment>
+    );
+  }
+
   // --------------------------------------------
 
   return (
@@ -72,17 +95,7 @@ const App = () => {
 
           <NavLinks />
 
-          <Switch>
-            <Route path='/'>
-              <AuthPage />
-            </Route>
-
-            <Route path='/'>
-              <button onClick={getUsersHandler}>Get Users</button>
-            </Route>
-
-            <Redirect to='/auth' />
-          </Switch>
+          <Switch>{routes}</Switch>
         </div>
       </Router>
     </AuthContext.Provider>
