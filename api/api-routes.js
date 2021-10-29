@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./data/db-config');
+// const db = require('./data/db-config');
+const db = require('../data/db-config');
 
 // ==============================================
 
-function getAllUsers() {
-  return db('users');
-}
+// function getAllUsers() {
+//   return db('users');
+// }
 
 // ==============================================
 
@@ -27,17 +28,17 @@ function update_vote(id, value) {
 
 // ==============================================
 
-async function insertUser(user) {
-  // WITH POSTGRES WE CAN PASS A "RETURNING ARRAY" AS 2ND ARGUMENT TO knex.insert/update
-  // AND OBTAIN WHATEVER COLUMNS WE NEED FROM THE NEWLY CREATED/UPDATED RECORD
-  // UNLIKE SQLITE WHICH FORCES US DO DO A 2ND DB CALL
-  const [newUserObject] = await db('users').insert(user, [
-    'user_id',
-    'username',
-    'password',
-  ]);
-  return newUserObject; // { user_id: 7, username: 'foo', password: 'xxxxxxx' }
-}
+// async function insertUser(user) {
+//   // WITH POSTGRES WE CAN PASS A "RETURNING ARRAY" AS 2ND ARGUMENT TO knex.insert/update
+//   // AND OBTAIN WHATEVER COLUMNS WE NEED FROM THE NEWLY CREATED/UPDATED RECORD
+//   // UNLIKE SQLITE WHICH FORCES US DO DO A 2ND DB CALL
+//   const [newUserObject] = await db('users').insert(user, [
+//     'user_id',
+//     'username',
+//     'password',
+//   ]);
+//   return newUserObject; // { user_id: 7, username: 'foo', password: 'xxxxxxx' }
+// }
 
 async function insertQuote(quote) {
   // WITH POSTGRES WE CAN PASS A "RETURNING ARRAY" AS 2ND ARGUMENT TO knex.insert/update
@@ -57,32 +58,32 @@ async function insertQuote(quote) {
 // ==============================================
 
 // [GET] /api/josh
-router.get('/josh', (req, res) => {
-  res.json({ message: 'josh. GET' });
-});
+// router.get('/josh', (req, res) => {
+//   res.json({ message: 'josh. GET' });
+// });
 
 // ==============================================
 
 // [POST] /api/josh
-router.post('/josh', (req, res) => {
-  const body = req.body;
+// router.post('/josh', (req, res) => {
+//   const body = req.body;
 
-  res.json({ message: body.message });
-});
+//   res.json({ message: body.message });
+// });
 
 // ==============================================
 
 // [GET] /api/users
-router.get('/users', async (req, res) => {
-  res.json(await getAllUsers());
-});
+// router.get('/users', async (req, res) => {
+//   res.json(await getAllUsers());
+// });
 
 // ==============================================
 
 // [POST] /api/users
-router.post('/users', async (req, res) => {
-  res.status(201).json(await insertUser(req.body));
-});
+// router.post('/users', async (req, res) => {
+//   res.status(201).json(await insertUser(req.body));
+// });
 
 // ==============================================
 

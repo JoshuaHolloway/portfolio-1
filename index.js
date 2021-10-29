@@ -61,9 +61,15 @@ server.get('/api/hello', (req, res) => {
 
 // ==============================================
 
-// -Router(s):
+// -Routers:
 const apiRoutes = require('./api/api-routes');
 server.use('/api', apiRoutes);
+
+const authRouter = require('./api/auth/auth-router');
+server.use('/api/auth', authRouter);
+
+const usersRouter = require('./api/users/users-router');
+server.use('/api/users', usersRouter);
 
 // ==============================================
 
