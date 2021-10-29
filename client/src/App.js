@@ -64,22 +64,22 @@ const App = () => {
   let routes;
   if (isLoggedIn) {
     routes = (
-      <React.Fragment>
+      <Switch>
         <Route path='/'>
           Private Route!
           <button onClick={getUsersHandler}>Get Users</button>
         </Route>
-      </React.Fragment>
+      </Switch>
     );
   } else {
     routes = (
-      <React.Fragment>
+      <Switch>
         <Route path='/'>
           <AuthPage />
         </Route>
 
         {/* <Redirect to='/public' /> */}
-      </React.Fragment>
+      </Switch>
     );
   }
 
@@ -95,7 +95,7 @@ const App = () => {
 
           <NavLinks />
 
-          <Switch>{routes}</Switch>
+          <main>{routes}</main>
         </div>
       </Router>
     </AuthContext.Provider>
