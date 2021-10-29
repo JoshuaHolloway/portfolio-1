@@ -1,5 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from 'react-router-dom';
+
+import NavLinks from './elements/components/NavLinks/NavLinks';
+
+import AuthPage from './elements/pages/AuthPage';
+
+import { AuthContext } from './shared/context/auth-context';
+
 // ==============================================
 
 // import logo from './logo.svg';
@@ -10,47 +22,21 @@ import './App.css';
 const App = () => {
   // --------------------------------------------
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
+  // -Create function only once
+  const login = useCallback(() => {
+    setIsLoggedIn(true);
+  }, []);
+
+  const logout = useCallback(() => {
+    setIsLoggedIn(false);
+  }, []);
 
   useEffect(() => {
     console.log('users: ', users);
   }, [users]);
-  useEffect(() => {
-    console.log('username: ', username);
-  }, [username]);
-  useEffect(() => {
-    console.log('password: ', password);
-  }, [password]);
-
-  // --------------------------------------------
-
-  useEffect(() => {}, []);
-
-  // --------------------------------------------
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#supplying_request_options
-  async function postData(endpoint = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND}${endpoint}`,
-      {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-      }
-    );
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
 
   // --------------------------------------------
 
@@ -68,62 +54,38 @@ const App = () => {
 
   // --------------------------------------------
 
-  const onRegisterHandler = async (e) => {
-    e.preventDefault();
-
-    const data = await postData('/auth/register', { username, password });
-    console.log('data: ', data);
-  };
-
-  // --------------------------------------------
-
-  const onLoginHandler = async (e) => {
-    e.preventDefault();
-
-    const data = await postData('/auth/login', { username, password });
-    console.log('data: ', data);
-  };
-
-  // --------------------------------------------
-
   const getUsersHandler = async () => {
     const users = await getData('/users');
     console.log('users: ', users);
+    setUsers(users);
   };
 
   // --------------------------------------------
 
   return (
-    <div className='App'>
-      <form>
-        <h5>Register</h5>
+    // -When the value of any of thse change the ne value
+    //  is passed down to the components that are interested.
+    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+      <Router>
+        <div className='App'>
+          <div>{isLoggedIn ? 'Logged In' : 'Not Logged In'}</div>
 
-        <label htmlFor='username'>
-          <input
-            id='username'
-            type='text'
-            placeholder='username'
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-          />
-        </label>
+          <NavLinks />
 
-        <label htmlFor='password'>
-          <input
-            id='password'
-            type='text'
-            placeholder='password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-        </label>
+          <Switch>
+            <Route path='/'>
+              <AuthPage />
+            </Route>
 
-        <button onClick={onRegisterHandler}>Register</button>
-        <button onClick={onLoginHandler}>Login</button>
-      </form>
+            <Route path='/'>
+              <button onClick={getUsersHandler}>Get Users</button>
+            </Route>
 
-      <button onClick={getUsersHandler}>Get Users</button>
-    </div>
+            <Redirect to='/auth' />
+          </Switch>
+        </div>
+      </Router>
+    </AuthContext.Provider>
   );
 
   // --------------------------------------------
