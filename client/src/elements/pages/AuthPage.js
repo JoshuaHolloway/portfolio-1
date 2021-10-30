@@ -58,9 +58,7 @@ const AuthPage = () => {
 
     const data = await postData('/auth/login', { username, password });
     console.log('data: ', data);
-    debugger;
-
-    auth.login();
+    auth.login(data.token);
   };
   // --------------------------------------------
 

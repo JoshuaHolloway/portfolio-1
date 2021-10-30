@@ -22,16 +22,28 @@ import './App.css';
 const App = () => {
   // --------------------------------------------
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // -token is local state to App.
+  // -But it is tied to context's token.
+  // -Hence, when this token state updates
+  //  it sets its value to the context token.
+  const [token, setToken] = useState(null);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [users, setUsers] = useState([]);
 
   // -Create function only once
-  const login = useCallback(() => {
-    setIsLoggedIn(true);
+  // -These f()'s are stored in context.
+  const login = useCallback((token) => {
+    // -TODO: Place token in local storage.
+
+    // setIsLoggedIn(true);
+    setToken(token);
   }, []);
 
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
+  const logout = useCallback((token) => {
+    // -TODO: Remove token from local storage.
+
+    // setIsLoggedIn(false);
+    setToken(null);
   }, []);
 
   useEffect(() => {
@@ -62,7 +74,7 @@ const App = () => {
 
   // -Frontend protected routes
   let routes;
-  if (isLoggedIn) {
+  if (token) {
     routes = (
       <Switch>
         <Route path='/'>
@@ -88,11 +100,9 @@ const App = () => {
   return (
     // -When the value of any of thse change the ne value
     //  is passed down to the components that are interested.
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn: !!token, token, login, logout }}>
       <Router>
         <div className='App'>
-          <div>{isLoggedIn ? 'Logged In' : 'Not Logged In'}</div>
-
           <NavLinks />
 
           <main>{routes}</main>
