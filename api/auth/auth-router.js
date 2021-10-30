@@ -12,10 +12,13 @@ const UsersModel = require('../users/users-model');
 
 function buildToken(user) {
   const payload = {
-    subject: user.id,
+    userId: user.user_id,
     username: user.username,
     role: user.role,
   };
+
+  console.log('buildToken payload: ', payload);
+
   const options = {
     expiresIn: '1d',
   };
@@ -55,6 +58,11 @@ router.post('/login', authMiddleware.checkAuthPayload, (req, res, next) => {
   UsersModel.findBy({ username }) // it would be nice to have middleware do this
     .then(([user]) => {
       if (user && bcrypt.compareSync(password, user.password)) {
+        console.log(
+          '[POST] /login -> UsersModel.findBy({ username }).then([user]) -> user: ',
+          user
+        );
+
         // -Note: Same as auth-1,
         //        but no session is started.
         // -Build the token!

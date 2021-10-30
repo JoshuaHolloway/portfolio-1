@@ -20,6 +20,10 @@ const NavLinks = (props) => {
   return (
     <>
       <div>{auth.isLoggedIn ? 'Logged In' : 'Not Logged In'}</div>
+      <div>
+        {auth.isLoggedIn &&
+          `username: ${auth.user.username} userId: ${auth.user.userId} role: ${auth.user.role}`}
+      </div>
 
       {auth.isLoggedIn && (
         <button

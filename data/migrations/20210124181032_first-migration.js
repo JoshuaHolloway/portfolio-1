@@ -4,6 +4,7 @@ exports.up = async (knex) => {
       users.increments('user_id');
       users.string('username', 200).notNullable();
       users.string('password', 200).notNullable();
+      // users.string('role', 200).notNullable(); // TODO: Change to be stored in a seperate table
       users.timestamps(false, true);
     })
     .createTable('quotes', (quotes) => {

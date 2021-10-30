@@ -42,6 +42,11 @@ const App = () => {
 
     // setIsLoggedIn(true);
     setToken(token);
+    setUser({
+      username: decoded.username,
+      userId: decoded.userId,
+      role: decoded.role,
+    });
   }, []);
 
   const logout = useCallback((token) => {
