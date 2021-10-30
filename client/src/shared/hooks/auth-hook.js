@@ -39,8 +39,8 @@ export const useAuth = () => {
       const tokenExpirationDate =
         expirationDate ||
         new Date( // now + 1d
-          currentDate + 1e3 /*1s*/ * 60 /*1min*/ * 60 /*1hr*/ * 24 /* 1d */
-          // currentDate + 10e3 /*10s*/
+          // currentDate + 1e3 /*1s*/ * 60 /*1min*/ * 60 /*1hr*/ * 24 /* 1d */
+          currentDate + 1e3 /*1s*/ * 10 /* 10s. */
         );
 
       // -We will go in here upon new login.
@@ -81,25 +81,17 @@ export const useAuth = () => {
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
 
-    console.clear();
-    console.log('storedData.token: ', storedData.token);
-    console.log(
-      'new Date(storedData.expiration): ',
-      new Date(storedData.expiration)
-    );
-    console.log('new Date():                      ', new Date());
-    // console.log(
-    //   'new Date(storedData.expiration) > new Date(): ',
-    //   new Date(storedData.expiration) > new Date()
-    // );
+    if (storedData) {
+      console.clear();
+      console.log('current time:    ', new Date());
+      console.log('expiration time: ', new Date(storedData.expiration));
+    }
 
     if (
       storedData &&
       storedData.token &&
       new Date(storedData.expiration) > new Date() // expiration in future => still valid
     ) {
-      console.clear();
-
       // -Don't create a new expiration time
       // -We want to only create a new expiration time
       //  upon new login.
