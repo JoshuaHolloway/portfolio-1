@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import decodeJWT from 'jwt-decode';
 import {
   BrowserRouter as Router,
   Route,
@@ -27,14 +28,17 @@ const App = () => {
   // -Hence, when this token state updates
   //  it sets its value to the context token.
   const [token, setToken] = useState(null);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
   const [users, setUsers] = useState([]);
 
   // -Create function only once
   // -These f()'s are stored in context.
   const login = useCallback((token) => {
-    // -TODO: Place token in local storage.
-    // localStorage.setItem('token', data.token);
+    localStorage.setItem('token', token);
+    // localStorage.setItem('userData', JSON.stringify({ userId: 1, token }));
+
+    const decoded = decodeJWT(token);
+    console.log('decoded: ', decoded);
 
     // setIsLoggedIn(true);
     setToken(token);
@@ -42,9 +46,9 @@ const App = () => {
 
   const logout = useCallback((token) => {
     // -TODO: Remove token from local storage.
-    // if (localStorage.getItem('token')) {
-    //   localStorage.removeItem('token')
-    // }
+    if (localStorage.getItem('token')) {
+      localStorage.removeItem('token');
+    }
 
     // setIsLoggedIn(false);
     setToken(null);
@@ -53,6 +57,22 @@ const App = () => {
   useEffect(() => {
     console.log('users: ', users);
   }, [users]);
+
+  // --------------------------------------------
+
+  // -NOTE: useEffect runs AFTER the render-cycle!
+  useEffect(() => {
+    const t = localStorage.getItem('token');
+    if (t) {
+      login(t);
+    }
+  }, [login]);
+  // -Due to useCallbac, login creation will only run once.
+  // -In other words, this useEffect callback
+  //  will only run directly after initial page render.
+  // -Since this runs AFTER page render,
+  //  the user will see a flash of the non-logged-in
+  //  user screen before this runs.
 
   // --------------------------------------------
 
@@ -111,7 +131,9 @@ const App = () => {
   return (
     // -When the value of any of thse change the ne value
     //  is passed down to the components that are interested.
-    <AuthContext.Provider value={{ isLoggedIn: !!token, token, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn: !!token, token, login, logout, user }}
+    >
       <Router>
         <div className='App'>
           <NavLinks />

@@ -66,9 +66,10 @@ Auth flow:
  returned to the frontend via the HTTP response.
 -
 
-
 TOOD:
   -Store token in local-storage
-  -Send token in subsquent requests 
-   in header Authorization property.
-  -Add backend protected route middleware.
+  -Authorization:
+    --When sending request to update some protected resource
+      (e.g. an appointment for a given user),
+      we want to verify the appointment corresponds to 
+      the user correct user.
