@@ -39,4 +39,36 @@ Auth flow:
 -Token is then returned in response.
 -On frontend, (back in onLoginHandler())
  the token from the response is placed in
- context variable token
+ context variable token, which then
+ (via !!token) stores the isLoggedIn
+ state.
+--NOTE: We are not verifying the token on the frontend here. Can't a hacker just change the variable token to something not falsey, and that would then allow the frontend protected routes to be accessed?
+  ---This is okay because in order to get any data fromt he backend for an authorized user they must send the token in the request which IS verified.
+
+-TODO: Here the token will be placed in local storage.
+
+-Next, when the logged in user presses the "Get Users"
+ button, a GET request is made to /api/users,
+ which has a protected middleware function in front of it.
+-The protected middleware is /api/auth/auth-middleware.js -> restricted(req, res, next)
+  --The token is grabbed from the header
+      const token = req.headers.authorization;
+  --Note that headers.Authorization: token, is set in the request.
+-The token is then jwt-verified for validity.
+-The token is then decoded, and the decoded
+ values are stored on the decodedJwt property
+ of the request object and passed onwards
+ through the middleware pipeline.
+-The getUsers() function from the users-controller
+ is then invoked which runs the usersModel.getAllUsers()
+ async method to hit the DB to grab all users.
+-Once the promise resolves, the users are 
+ returned to the frontend via the HTTP response.
+-
+
+
+TOOD:
+  -Store token in local-storage
+  -Send token in subsquent requests 
+   in header Authorization property.
+  -Add backend protected route middleware.

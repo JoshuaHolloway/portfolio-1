@@ -7,7 +7,7 @@ const authMiddleware = require('../auth/auth-middleware');
 // ==============================================
 
 // [GET] /api/users
-router.get('/', usersController.getUsers);
+router.get('/', authMiddleware.restricted, usersController.getUsers);
 
 // ==============================================
 

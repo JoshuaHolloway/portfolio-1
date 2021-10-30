@@ -34,6 +34,7 @@ const App = () => {
   // -These f()'s are stored in context.
   const login = useCallback((token) => {
     // -TODO: Place token in local storage.
+    // localStorage.setItem('token', data.token);
 
     // setIsLoggedIn(true);
     setToken(token);
@@ -41,6 +42,9 @@ const App = () => {
 
   const logout = useCallback((token) => {
     // -TODO: Remove token from local storage.
+    // if (localStorage.getItem('token')) {
+    //   localStorage.removeItem('token')
+    // }
 
     // setIsLoggedIn(false);
     setToken(null);
@@ -54,10 +58,16 @@ const App = () => {
 
   async function getData(endpoint = '') {
     // Default options are marked with *
+    const url = `${process.env.REACT_APP_BACKEND}${endpoint}`;
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}${endpoint}`
-      );
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          // 'Content-Type': 'application/json',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: token,
+        },
+      });
       return response.json(); // parses JSON response into native JavaScript objects
     } catch (err) {
       console.log('error: ', err);
@@ -73,6 +83,7 @@ const App = () => {
   };
 
   // -Frontend protected routes
+  // -Shouldn't we check to make sure the token is valid here?
   let routes;
   if (token) {
     routes = (
