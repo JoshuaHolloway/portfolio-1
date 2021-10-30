@@ -5,6 +5,7 @@ import decodeJWT from 'jwt-decode';
 // !!! NOTE! The bug is that if the user does not click logout.
 // -We also need to automatically log the user out.
 let logoutTimer; // set this whenever token changes.
+let delta;
 
 export const useAuth = () => {
   // --------------------------------------------
@@ -22,6 +23,8 @@ export const useAuth = () => {
   const login = useCallback((token, expirationDate) => {
     const decoded = decodeJWT(token);
     console.log('decoded: ', decoded);
+    delta = decoded.exp - decoded.iat;
+    console.log('delta: ', delta);
     // -NOTE: Can extract expiration date from
     //        decoded token!!!
 
@@ -38,8 +41,10 @@ export const useAuth = () => {
       expirationDate || // if expirationDate is NOT retreived from local-storage, then calculate it from the current time + delta
       new Date( // now + 1d
         // currentDate + 1e3 /*1s*/ * 60 /*1min*/ * 60 /*1hr*/ * 24 /* 1d */
-        currentDate + 1e3 /*1s*/ * 10 /* 10s. */
-        // TODO: Extract this from the actual token!!
+        // currentDate + 1e3 /*1s*/ * 10 /* 10s. */
+        currentDate + 1e3 /*1s*/ * delta /* delta-seconds */
+        // ^Extracted from the actual expiration date
+        //  encoded in token!!
       );
 
     // Update state:
@@ -110,7 +115,6 @@ export const useAuth = () => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
 
     if (storedData) {
-      console.clear();
       console.log('current time:    ', new Date());
       console.log('expiration time: ', new Date(storedData.expiration));
     }

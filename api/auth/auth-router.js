@@ -20,7 +20,7 @@ function buildToken(user) {
   console.log('buildToken payload: ', payload);
 
   const options = {
-    expiresIn: '1d',
+    expiresIn: '1m', // '1d, 1h, 1m
   };
 
   return jwt.sign(payload, TOKEN_SECRET, options);
