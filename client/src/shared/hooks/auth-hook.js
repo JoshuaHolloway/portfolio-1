@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 
 import decodeJWT from 'jwt-decode';
 
+// !!! NOTE! The bug is that if the user does not click logout.
+// -We also need to automatically log the user out.
+let logoutTimer; // set this whenever token changes.
+
 export const useAuth = () => {
   // --------------------------------------------
 
@@ -12,49 +16,48 @@ export const useAuth = () => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState({});
 
-  // -Create function only once
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
+
   // -These f()'s are stored in context.
-  // -NOTE: I think the use of the expirationDate
-  //        parameter is not needed (redundant).
-  //       -It is used to determine if we should
-  //        create a new timestamp or not
-  //        (i.e. whether this login() was called
-  //         from a new login or from a page refresh).
-  //       -Since I just check if token is already in
-  //        local storage to determine if we are
-  //        in one of these two cases, I don't
-  //        need expirationDate.
   const login = useCallback((token, expirationDate) => {
     const decoded = decodeJWT(token);
     console.log('decoded: ', decoded);
     // -NOTE: Can extract expiration date from
     //        decoded token!!!
-    //
 
     // -This function runs upon logging in
     //  AND upon page refresh.
-    if (!localStorage.getItem('userData')) {
-      // -Set expiration date
-      const currentDate = new Date().getTime(); // # of ms since beginning of time
-      const tokenExpirationDate =
-        expirationDate ||
-        new Date( // now + 1d
-          // currentDate + 1e3 /*1s*/ * 60 /*1min*/ * 60 /*1hr*/ * 24 /* 1d */
-          currentDate + 1e3 /*1s*/ * 10 /* 10s. */
-        );
 
-      // -We will go in here upon new login.
-      // localStorage.setItem('token', token);
-      localStorage.setItem(
-        'userData',
-        JSON.stringify({
-          userId: decoded.userId,
-          username: decoded.username,
-          token,
-          expiration: tokenExpirationDate.toISOString(),
-        })
+    // -Set expiration date
+    const currentDate = new Date().getTime(); // # of ms since beginning of time
+
+    // -Shadowed variable
+    // -Does not overwrite out actual state
+    // -state variable with same name!
+    const tokenExpirationDate =
+      expirationDate || // if expirationDate is NOT retreived from local-storage, then calculate it from the current time + delta
+      new Date( // now + 1d
+        // currentDate + 1e3 /*1s*/ * 60 /*1min*/ * 60 /*1hr*/ * 24 /* 1d */
+        currentDate + 1e3 /*1s*/ * 10 /* 10s. */
+        // TODO: Extract this from the actual token!!
       );
-    }
+
+    // Update state:
+    setTokenExpirationDate(tokenExpirationDate);
+    // -In the next re-render cycle we will have the correct
+    //  token expiration date.
+
+    // -We will go in here upon new login.
+    // localStorage.setItem('token', token);
+    localStorage.setItem(
+      'userData',
+      JSON.stringify({
+        userId: decoded.userId,
+        username: decoded.username,
+        token,
+        expiration: tokenExpirationDate.toISOString(),
+      })
+    );
 
     // setIsLoggedIn(true);
     setToken(token);
@@ -73,7 +76,32 @@ export const useAuth = () => {
 
     // setIsLoggedIn(false);
     setToken(null);
+    setTokenExpirationDate(null);
   }, []);
+
+  // --------------------------------------------
+
+  useEffect(() => {
+    // -When we login, we set a new timer.
+    // -When we logout, we clear the timer.
+    // -Both logging out and logging in
+    //  change the state of token
+    //  which triggers this useEffect callback.
+
+    if (token && tokenExpirationDate) {
+      const remainingTime =
+        tokenExpirationDate.getTime() - new Date().getTime();
+
+      logoutTimer = setTimeout(logout, remainingTime);
+    } else {
+      // -the else block runs when the user
+      //  manually presss the log-out button.
+      clearTimeout(logoutTimer);
+    }
+  }, [token, logout, tokenExpirationDate]);
+  // -Token either changed because:
+  //  - we logged in (through form or auto-login)
+  //  - we logged out
 
   // --------------------------------------------
 
