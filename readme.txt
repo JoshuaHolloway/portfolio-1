@@ -42,11 +42,19 @@ Auth flow:
  context variable token, which then
  (via !!token) stores the isLoggedIn
  state.
---NOTE: We are not verifying the token on the frontend here. Can't a hacker just change the variable token to something not falsey, and that would then allow the frontend protected routes to be accessed?
-  ---This is okay because in order to get any data fromt he backend for an authorized user they must send the token in the request which IS verified.
-
--TODO: Here the token will be placed in local storage.
-
+-Also, the JWT is decoded and the userId, username, and role
+ are also stored in context under the user property:
+ user: {
+   userId,
+   username,
+   role
+ }
+  --NOTE: We are not verifying the token on the frontend here. Can't a hacker just change the variable token to something not falsey, and that would then allow the frontend protected routes to be accessed?
+    ---This is okay because in order to get any data fromt he backend for an authorized user they must send the token in the request which IS verified.
+-Token is placed in local storage.
+-useEffect is used to check if the token is found in local-storage.
+  --If it is, then execute the login(token) function
+    which sets context for the token property.
 -Next, when the logged in user presses the "Get Users"
  button, a GET request is made to /api/users,
  which has a protected middleware function in front of it.
@@ -67,7 +75,6 @@ Auth flow:
 -
 
 TOOD:
-  -Store token in local-storage
   -Authorization:
     --When sending request to update some protected resource
       (e.g. an appointment for a given user),
