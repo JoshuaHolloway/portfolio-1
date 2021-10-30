@@ -44,20 +44,6 @@ const AuthPage = () => {
 
   // --------------------------------------------
 
-  async function getData(endpoint = '') {
-    // Default options are marked with *
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}${endpoint}`
-      );
-      return response.json(); // parses JSON response into native JavaScript objects
-    } catch (err) {
-      console.log('error: ', err);
-    }
-  }
-
-  // --------------------------------------------
-
   const onRegisterHandler = async (e) => {
     e.preventDefault();
 
@@ -72,6 +58,7 @@ const AuthPage = () => {
 
     const data = await postData('/auth/login', { username, password });
     console.log('data: ', data);
+    debugger;
 
     auth.login();
   };
