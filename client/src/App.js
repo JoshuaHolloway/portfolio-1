@@ -89,7 +89,9 @@ const App = () => {
       <Router>
         <div className='App'>
           <NavLinks />
-
+          <h1>
+            <a href='https://joshua-holloway.com/'>joshua-holloway.com</a>
+          </h1>
           <main>{routes}</main>
         </div>
       </Router>
